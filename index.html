@@ -1,99 +1,322 @@
-// 來源：地方氣候變遷政策與計畫（你上傳的清單）:contentReference[oaicite:1]{index=1}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>地方氣候變遷政策與計畫（PDF）</title>
+
+  <style>
+    :root{
+      --bg:#f3f5f7;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --accent:#9b3b3b;
+      --accent-weak:#fff7f7;
+      --shadow:0 10px 26px rgba(0,0,0,.08);
+      --link:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      padding:40px 18px 60px;
+      background:var(--bg);
+      font-family:"微軟正黑體", Arial, sans-serif;
+      color:var(--text);
+      line-height:1.7;
+    }
+
+    .wrap{ max-width:1100px; margin:0 auto; }
+
+    .header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:12px;
+    }
+    .title{
+      margin:0;
+      font-size:2rem;
+      letter-spacing:.5px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .title::before{
+      content:"";
+      width:10px;
+      height:30px;
+      border-radius:6px;
+      background:var(--accent);
+    }
+    .hint{ color:var(--muted); font-size:1rem; margin:0; }
+
+    .filters{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin: 6px 0 16px;
+    }
+    .control{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      box-shadow:0 6px 18px rgba(0,0,0,.04);
+    }
+    .control span{ color:var(--muted); font-weight:800; font-size:.95rem; }
+    .control input, .control select{
+      border:none;
+      outline:none;
+      font-size:1rem;
+      background:transparent;
+      color:var(--text);
+      min-width: 200px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    @media (min-width: 920px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .tile{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 64px 1fr;
+      min-height: 148px;
+    }
+
+    .rail{
+      background:linear-gradient(180deg, var(--accent), #7f2b2b);
+      padding:14px 10px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .num{
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.25);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+    }
+    .chip{
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-weight:800;
+      color:#fff;
+      font-size:.85rem;
+      letter-spacing:.12em;
+    }
+
+    .body{
+      padding:16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .titlelink{
+      color:var(--link);
+      font-weight:900;
+      text-decoration:none;
+      font-size:1.18rem;
+      cursor:pointer;
+    }
+    .titlelink:hover{ text-decoration:underline; }
+
+    .desc{
+      margin:0;
+      font-size:1.02rem;
+      display:-webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+    }
+
+    .footer{
+      margin-top:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .meta{ color:var(--muted); font-size:.92rem; }
+
+    .btn{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fbfbfc;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .btn:hover{
+      background:var(--accent-weak);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      transform:translateY(-1px);
+    }
+
+    /* PDF modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:50;
+    }
+    .modal.is-open{ display:flex; }
+    .backdrop{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.55);
+    }
+    .panel{
+      position:relative;
+      width:min(1100px,100%);
+      height:80vh;
+      background:#fff;
+      border-radius:14px;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .panelhead{
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background:var(--accent-weak);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    iframe{ flex:1; border:0; }
+
+    @media(max-width:640px){
+      .chip{ display:none; }
+      .tile{ grid-template-columns:56px 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1 class="title">地方氣候變遷政策與計畫（PDF）</h1>
+    <p class="hint">點標題或按鈕即可查看政策 PDF</p>
+  </div>
+
+  <div class="filters">
+    <label class="control"><span>關鍵字</span><input id="q" /></label>
+    <label class="control">
+      <span>類型</span>
+      <select id="type">
+        <option value="all">全部</option>
+        <option value="調適">調適</option>
+        <option value="減緩">減緩</option>
+        <option value="治理">治理</option>
+        <option value="防災">防災</option>
+        <option value="國土/環境">國土/環境</option>
+      </select>
+    </label>
+    <div class="control"><span>顯示</span><strong id="count">0</strong></div>
+  </div>
+
+  <section class="grid" id="grid"></section>
+</div>
+
+<div class="modal" id="modal">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <div class="panelhead">
+      <strong id="modalTitle"></strong>
+      <button class="btn" data-close>關閉</button>
+    </div>
+    <iframe id="frame"></iframe>
+  </div>
+</div>
+
+<script>
 const DATA = [
-  {
-    no:"01", chip:"ADAPT", type:"調適", meta:"宜蘭縣｜114",
-    title:"宜蘭縣氣候變遷調適執行方案（核定本）",
-    desc:"透過氣候推估（溫度、降雨、海平面上升等）與脆弱度分析，檢視宜蘭各領域的氣候風險，提出跨局處調適策略，包括防災、水資源韌性、海岸保護、農業調適、社區韌性、公共衛生防護等。",
-    pdf:"pdfs/114_宜蘭縣_宜蘭縣氣候變遷調適執行方案（核定本）.pdf"
-  },
-  {
-    no:"02", chip:"MITI", type:"減緩", meta:"宜蘭縣｜108",
-    title:"宜蘭縣第一期溫室氣體管制執行方案（107–109 年）",
-    desc:"第一期方案是宜蘭縣最早系統化的減碳政策，奠定地方排放盤查、部門別減量策略、執行架構及治理基礎，並為第二期方案（110–114）鋪陳完整政策路徑。",
-    pdf:"pdfs/108_宜蘭縣_宜蘭縣第一期溫室氣體管制執行方案（107–109 年）.pdf"
-  },
-  {
-    no:"03", chip:"GOV", type:"治理", meta:"宜蘭縣｜112",
-    title:"112 年宜蘭縣因應氣候變遷溫室氣體盤查及執行方案策略研擬專案工作計畫",
-    desc:"此計畫偏向減緩（mitigation）＋治理（governance），目的為提升地方盤查能力、建立淨零政策基礎並研擬地方版自治條例。",
-    pdf:"pdfs/112_宜蘭縣_112 年宜蘭縣因應氣候變遷溫室氣體盤查及執行方案策略研擬專案工作計畫.pdf"
-  },
-  {
-    no:"04", chip:"MITI", type:"減緩", meta:"宜蘭縣｜112",
-    title:"宜蘭縣第二期溫室氣體減量執行方案（核定本）",
-    desc:"方案屬於減緩（mitigation）政策，透過能源轉型、節能措施、住商建築改善、交通減碳與廢棄物管理，降低宜蘭縣整體溫室氣體排放量，並與國家 2050 淨零目標接軌。",
-    pdf:"pdfs/112_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案（核定本）.pdf"
-  },
-  {
-    no:"05", chip:"GOV", type:"治理", meta:"宜蘭縣｜99",
-    title:"宜蘭縣氣候變遷因應推動會設置要點（原低碳推動小組）",
-    desc:"此為全縣氣候變遷治理的最高層級平台，負責整合調適＋減碳政策，確保所有局處策略一致與行動落實。",
-    pdf:"pdfs/99_宜蘭縣_宜蘭縣氣候變遷因應推動會設置要點（原低碳推動小組）.pdf"
-  },
-  {
-    no:"06", chip:"DRR", type:"防災", meta:"宜蘭縣｜100",
-    title:"宜蘭縣危險潛勢區域管理辦法",
-    desc:"此辦法以極端降雨、山崩、海岸侵蝕等風險為依據，對危險地區進行公告、管制與防救規範，是地方調適制度工具。",
-    pdf:"pdfs/100_宜蘭縣_宜蘭縣危險潛勢區域管理辦法.pdf"
-  },
-  {
-    no:"07", chip:"DRR", type:"防災", meta:"宜蘭縣｜113",
-    title:"宜蘭縣地區災害防救計畫(113年)",
-    desc:"此計畫涵蓋颱洪、淹水、土石流、海嘯、寒害等重大天然災害，為地方氣候調適的核心防災手段。",
-    pdf:"pdfs/113_宜蘭縣_宜蘭縣地區災害防救計畫(113年).pdf"
-  },
-  {
-    no:"08", chip:"ADAPT", type:"調適", meta:"宜蘭縣｜113",
-    title:"宜蘭縣氣候變遷調適執行方案 113 年成果報告",
-    desc:"本成果報告為宜蘭縣氣候變遷調適方案的年度執行盤整文件，內容涵蓋災害、水資源、海岸、農業、健康等多領域調適行動的進度、成果、挑戰及滾動修正，作為後續年度調適政策的重要依據。",
-    pdf:"pdfs/113_宜蘭縣_宜蘭縣氣候變遷調適執行方案 113 年成果報告.pdf"
-  },
-  {
-    no:"09", chip:"MITI", type:"減緩", meta:"宜蘭縣｜114",
-    title:"宜蘭縣第二期溫室氣體減量執行方案 113 年成果報告",
-    desc:"本報告呈現 113 年宜蘭縣的減碳成果，包括排放量變化、達標狀況及部門改善程度，提供後續政策滾動調整依據。",
-    pdf:"pdfs/114_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案 113 年成果報告.pdf"
-  },
-  {
-    no:"10", chip:"MITI", type:"減緩", meta:"宜蘭縣｜112",
-    title:"宜蘭縣第二期溫室氣體減量執行方案 - 111 年成果報告",
-    desc:"減緩與調適並行，含淨零排放路徑、能源轉型、氣候治理體系。",
-    pdf:"pdfs/112_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案 - 111 年成果報告.pdf"
-  },
-  {
-    no:"11", chip:"MITI", type:"減緩", meta:"宜蘭縣｜110",
-    title:"宜蘭縣第一期溫室氣體管制執行方案成果報告",
-    desc:"減緩氣候變遷，建立第一期縣市 GHG 減量制度架構。",
-    pdf:"pdfs/110_宜蘭縣_宜蘭縣第一期溫室氣體管制執行方案成果報告.pdf"
-  },
-  {
-    no:"12", chip:"DRR", type:"防災", meta:"宜蘭縣｜112",
-    title:"112年宜蘭縣水災危險潛勢地區保全計畫",
-    desc:"本計畫專注於極端暴雨→淹水風險之調適措施，強化高風險地區的保全與應變。",
-    pdf:"pdfs/112_宜蘭縣_112年宜蘭縣水災危險潛勢地區保全計畫.pdf"
-  },
-  {
-    no:"13", chip:"MITI", type:"減緩", meta:"宜蘭縣｜103–109",
-    title:"宜蘭縣低碳永續家園運作體系及執行成效管考計畫（103–109）",
-    desc:"透過縣級減碳行動、綠色運輸、社區低碳行動、建築降溫、廚餘再利用、能源節約與綠能設施，提升社區韌性與縣市氣候調適能力。",
-    pdf:"pdfs/103-109_宜蘭縣_宜蘭縣低碳永續家園運作體系及執行成效管考計畫.pdf"
-  },
-  {
-    no:"14", chip:"LAND", type:"國土/環境", meta:"宜蘭縣｜110",
-    title:"宜蘭縣國土計畫(核定本)(110年4月)",
-    desc:"納入城鄉成長管理、水資源安全、災害風險降低、基礎設施保全、海岸保育、生態與農地維護等，多面向強化地方氣候韌性（第4章）。",
-    pdf:"pdfs/110_宜蘭縣_宜蘭縣國土計畫(核定本)(110年4月).pdf"
-  },
-  {
-    no:"15", chip:"GOV", type:"治理", meta:"宜蘭縣｜106",
-    title:"106年度宜蘭縣環保局因應氣候變遷執行計畫",
-    desc:"透過住宅能源管理、家戶用能調查、教育宣導、地方氣候政策研擬（自治條例），提升縣內民眾節能能力、減少能源需求，強化地方在氣候變遷下之韌性。",
-    pdf:"pdfs/106_宜蘭縣_106年度宜蘭縣環保局因應氣候變遷執行計畫.pdf"
-  },
-  {
-    no:"16", chip:"LAND", type:"國土/環境", meta:"宜蘭縣｜110",
-    title:"110年宜蘭縣環境保護計畫(第七版)",
-    desc:"本計畫將氣候變遷措施納入整體環境治理架構（如空污、水質、綠色運具、綠美化、能源轉型），並依據《溫室氣體減量及管理法》與縣內管制執行方案整合減緩與調適；透過植樹、綠美化、低碳交通、多元公共運輸、空污削減、廢棄物管理等提升環境韌性。",
-    pdf:"pdfs/110_宜蘭縣_110年宜蘭縣環境保護計畫(第七版).pdf"
-  },
+  {no:"01",chip:"ADAPT",type:"調適",meta:"114",title:"宜蘭縣氣候變遷調適執行方案（核定本）",desc:"透過氣候推估與脆弱度分析，提出跨局處調適策略。",pdf:"pdfs/114_宜蘭縣_宜蘭縣氣候變遷調適執行方案（核定本）.pdf"},
+  {no:"02",chip:"MITI",type:"減緩",meta:"108",title:"第一期溫室氣體管制執行方案（107–109）",desc:"奠定宜蘭縣減碳政策與治理基礎。",pdf:"pdfs/108_宜蘭縣_宜蘭縣第一期溫室氣體管制執行方案（107–109 年）.pdf"},
+  {no:"03",chip:"GOV",type:"治理",meta:"112",title:"溫室氣體盤查及策略研擬計畫",desc:"提升地方盤查能力，建立淨零政策基礎。",pdf:"pdfs/112_宜蘭縣_112 年宜蘭縣因應氣候變遷溫室氣體盤查及執行方案策略研擬專案工作計畫.pdf"},
+  {no:"04",chip:"MITI",type:"減緩",meta:"112",title:"第二期溫室氣體減量執行方案（核定本）",desc:"能源、交通、建築與廢棄物減碳行動。",pdf:"pdfs/112_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案（核定本）.pdf"},
+  {no:"05",chip:"GOV",type:"治理",meta:"99",title:"氣候變遷因應推動會設置要點",desc:"整合調適與減碳政策的縣級平台。",pdf:"pdfs/99_宜蘭縣_宜蘭縣氣候變遷因應推動會設置要點（原低碳推動小組）.pdf"},
+  {no:"06",chip:"DRR",type:"防災",meta:"100",title:"危險潛勢區域管理辦法",desc:"因應極端降雨、山崩、海岸侵蝕風險。",pdf:"pdfs/100_宜蘭縣_宜蘭縣危險潛勢區域管理辦法.pdf"},
+  {no:"07",chip:"DRR",type:"防災",meta:"113",title:"地區災害防救計畫",desc:"涵蓋颱洪、淹水、土石流等災害。",pdf:"pdfs/113_宜蘭縣_宜蘭縣地區災害防救計畫(113年).pdf"},
+  {no:"08",chip:"ADAPT",type:"調適",meta:"113",title:"調適執行方案113年成果報告",desc:"彙整年度調適成果與滾動修正。",pdf:"pdfs/113_宜蘭縣_宜蘭縣氣候變遷調適執行方案 113 年成果報告.pdf"},
+  {no:"09",chip:"MITI",type:"減緩",meta:"114",title:"第二期減量方案113年成果報告",desc:"呈現113年減碳成果與排放變化。",pdf:"pdfs/114_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案 113 年成果報告.pdf"},
+  {no:"10",chip:"MITI",type:"減緩",meta:"112",title:"第二期減量方案111年成果報告",desc:"減緩與調適並行的年度成果。",pdf:"pdfs/112_宜蘭縣_宜蘭縣第二期溫室氣體減量執行方案 - 111 年成果報告.pdf"},
+  {no:"11",chip:"MITI",type:"減緩",meta:"110",title:"第一期管制方案成果報告",desc:"建立縣市溫室氣體減量制度。",pdf:"pdfs/110_宜蘭縣_宜蘭縣第一期溫室氣體管制執行方案成果報告.pdf"},
+  {no:"12",chip:"DRR",type:"防災",meta:"112",title:"水災危險潛勢地區保全計畫",desc:"因應極端暴雨與淹水風險。",pdf:"pdfs/112_宜蘭縣_112年宜蘭縣水災危險潛勢地區保全計畫.pdf"},
+  {no:"13",chip:"MITI",type:"減緩",meta:"103–109",title:"低碳永續家園運作與成效管考",desc:"社區低碳行動與能源節約。",pdf:"pdfs/103-109_宜蘭縣_宜蘭縣低碳永續家園運作體系及執行成效管考計畫.pdf"},
+  {no:"14",chip:"LAND",type:"國土/環境",meta:"110",title:"國土計畫（核定本）",desc:"強化水資源安全與災害風險管理。",pdf:"pdfs/110_宜蘭縣_宜蘭縣國土計畫(核定本)(110年4月).pdf"},
+  {no:"15",chip:"GOV",type:"治理",meta:"106",title:"環保局因應氣候變遷執行計畫",desc:"能源管理、教育宣導與政策研擬。",pdf:"pdfs/106_宜蘭縣_106年度宜蘭縣環保局因應氣候變遷執行計畫.pdf"},
+  {no:"16",chip:"LAND",type:"國土/環境",meta:"110",title:"環境保護計畫（第七版）",desc:"整合減緩與調適的環境治理架構。",pdf:"pdfs/110_宜蘭縣_110年宜蘭縣環境保護計畫(第七版).pdf"},
 ];
+
+const grid=document.getElementById("grid");
+const q=document.getElementById("q");
+const type=document.getElementById("type");
+const count=document.getElementById("count");
+const modal=document.getElementById("modal");
+const frame=document.getElementById("frame");
+const modalTitle=document.getElementById("modalTitle");
+
+function render(){
+  const key=(q.value||"").toLowerCase();
+  const t=type.value;
+  const rows=DATA.filter(d=>{
+    return (t==="all"||d.type===t) &&
+      (d.title+d.desc).toLowerCase().includes(key);
+  });
+  count.textContent=rows.length;
+  grid.innerHTML=rows.map(d=>`
+    <article class="tile">
+      <div class="rail"><div class="num">${d.no}</div><div class="chip">${d.chip}</div></div>
+      <div class="body">
+        <a class="titlelink" onclick="openPdf('${d.pdf}','${d.title}')">${d.title}</a>
+        <p class="desc">${d.desc}</p>
+        <div class="footer">
+          <span class="meta">${d.type}｜${d.meta}</span>
+          <button class="btn" onclick="openPdf('${d.pdf}','${d.title}')">↗ 查看</button>
+        </div>
+      </div>
+    </article>`).join("");
+}
+function openPdf(pdf,title){
+  modal.classList.add("is-open");
+  modalTitle.textContent=title;
+  frame.src=pdf;
+}
+modal.addEventListener("click",e=>{
+  if(e.target.dataset.close){ modal.classList.remove("is-open"); frame.src=""; }
+});
+q.oninput=type.onchange=render;
+render();
+</script>
+</body>
+</html>
